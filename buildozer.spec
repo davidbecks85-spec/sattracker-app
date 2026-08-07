@@ -20,6 +20,6 @@ warn_on_root = 1
 [android]
 archs = arm64-v8a
 api = 33
-minapi = 21
+minapi = 24
 ndk = 25b
 accept_sdk_licenses = True
