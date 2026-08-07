@@ -14,6 +14,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Prepare Android SDK Dependencies & AIDL
+      run: |
+        apt-get update && apt-get install -y aidl
+        # Crea la cartella SDK e accetta le licenze
+        mkdir -p ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0
+        # Collega l'eseguibile aidl di sistema dove Buildozer si aspetta di trovarlo
+        cp $(which aidl) ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl || true
+
     - name: Build APK with Buildozer
       env:
         BUILDOZER_WARN_ON_ROOT: 0
