@@ -14,13 +14,26 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Prepare Android SDK Dependencies & AIDL
+    - name: Pre-configure Android SDK Tools & AIDL
       run: |
-        apt-get update && apt-get install -y aidl
-        # Crea la cartella SDK e accetta le licenze
-        mkdir -p ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0
-        # Collega l'eseguibile aidl di sistema dove Buildozer si aspetta di trovarlo
-        cp $(which aidl) ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/aidl || true
+        apt-get update && apt-get install -y aidl android-sdk
+        
+        # Pre-crea le strutture di directory per SDK/Build-tools
+        SDK_DIR="/github/home/.buildozer/android/platform/android-sdk"
+        mkdir -p "$SDK_DIR/tools/bin"
+        mkdir -p "$SDK_DIR/build-tools/33.0.0"
+
+        # Collega AIDL dove Buildozer lo cerca
+        cp $(which aidl) "$SDK_DIR/build-tools/33.0.0/aidl" || true
+
+        # Crea un mock/link di sdkmanager per superare il controllo iniziale di Buildozer
+        if [ -f "/usr/bin/sdkmanager" ]; then
+          ln -s /usr/bin/sdkmanager "$SDK_DIR/tools/bin/sdkmanager"
+        else
+          echo '#!/bin/sh' > "$SDK_DIR/tools/bin/sdkmanager"
+          echo 'exit 0' >> "$SDK_DIR/tools/bin/sdkmanager"
+          chmod +x "$SDK_DIR/tools/bin/sdkmanager"
+        fi
 
     - name: Build APK with Buildozer
       env:
