@@ -24,11 +24,10 @@ jobs:
         pip install --upgrade pip setuptools
         pip install --upgrade "buildozer<3.0.0" "cython<3.0.0"
 
-    - name: Pre-setup Android SDK & AIDL Link
+    - name: Link System Android SDK to Buildozer
       run: |
-        mkdir -p ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/
-        sudo cp /usr/bin/aidl ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/ 2>/dev/null || true
-        sudo cp $(which aidl) ~/.buildozer/android/platform/android-sdk/build-tools/33.0.0/ 2>/dev/null || true
+        mkdir -p ~/.buildozer/android/platform
+        ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
 
     - name: Build with Buildozer
       run: |
