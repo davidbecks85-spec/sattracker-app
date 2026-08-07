@@ -8,20 +8,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: kivy/buildozer:latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Build APK with Buildozer
-      env:
-        BUILDOZER_WARN_ON_ROOT: 0
-        APP_ANDROID_ACCEPT_SDK_LICENSES: 1
-      run: |
-        yes | buildozer -v android debug
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-    - name: Upload APK
+    - name: Build APK with Official Buildozer Action
+      uses: Kivy-Android/action-buildozer@v1.1.0
+      with:
+        workdir: .
+        buildozer_version: master
+
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: SatTrackerPro-APK
