@@ -12,26 +12,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Build with Buildozer Action
+      uses: ArtemSr/buildozer-action@v1.2.1
       with:
-        python-version: '3.10'
-
-    - name: Install System Dependencies & AIDL
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev python3-dev zip unzip zlib1g-dev openjdk-17-jdk ffmpeg libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good autoconf libtool pkg-config aidl
-        pip install --upgrade pip setuptools
-        pip install --upgrade "buildozer<3.0.0" "cython<3.0.0"
-
-    - name: Link System Android SDK to Buildozer
-      run: |
-        mkdir -p ~/.buildozer/android/platform
-        ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
-
-    - name: Build with Buildozer
-      run: |
-        buildozer -v android debug
+        command: buildozer -v android debug
+        subfolder: .
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
