@@ -8,7 +8,7 @@ version = 1.0.0
 
 requirements = python3,kivy==2.3.0,kivymd,pillow,plyer,requests
 
-android.permissions = ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, POST_NOTIFICATIONS
+android.permissions = ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 
 orientation = portrait
 fullscreen = 0
