@@ -8,15 +8,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: kivymd/kivymd:latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build with Buildozer Action
-      uses: ArtemSr/buildozer-action@v1.2.1
-      with:
-        command: buildozer -v android debug
-        subfolder: .
+    - name: Build APK with Buildozer
+      run: |
+        buildozer -v android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
