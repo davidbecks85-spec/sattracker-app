@@ -26,9 +26,8 @@ jobs:
 
     - name: Install System Dependencies
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev python3-dev zip unzip zlib1g-dev autoconf libtool pkg-config aidl libncurses5:i386 libstdc++6:i386 zlib1g:i386
+        sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev python3-dev zip unzip zlib1g-dev autoconf libtool pkg-config aidl
 
     - name: Install Buildozer and Cython
       run: |
@@ -43,7 +42,9 @@ jobs:
         yes | buildozer -v android debug
 
     - name: Upload APK
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: SatTrackerPro-APK
         path: bin/*.apk
+        if-no-files-found: ignore
