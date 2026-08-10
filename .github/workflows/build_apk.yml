@@ -1,6 +1,26 @@
-- name: Build APK with Buildozer
-      env:
-        APP_ANDROID_ACCEPT_SDK_LICENSES: 1
-        BUILDOZER_WARN_ON_ROOT: 0
-      run: |
-        yes | buildozer -v android debug
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    container:
+      image: kivy/buildozer:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build APK with Buildozer
+        run: |
+          buildozer -v android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SatTrackerPro-APK
+          path: bin/*.apk
